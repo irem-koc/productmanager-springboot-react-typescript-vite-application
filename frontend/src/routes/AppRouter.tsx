@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import Product from "../components/Product";
 import Home from "../pages/Home";
+import ProductDetail from "../pages/ProductDetail";
 import ProductList from "../pages/ProductList";
 
 const AppRouter = () => {
@@ -8,7 +8,7 @@ const AppRouter = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/products" element={<ProductList />} />
-      <Route path="/products/:id" element={<Product />} />
+      <Route path="/products/:id" element={<ProductDetail />} />
     </Routes>
   );
 };

@@ -1,4 +1,4 @@
-import { api } from "../type/api";
+import { api } from "../types/api";
 
 const getAll = async () => {
   try {
