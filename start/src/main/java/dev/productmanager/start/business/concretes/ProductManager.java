@@ -2,9 +2,11 @@ package dev.productmanager.start.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import dev.productmanager.start.business.abstracts.ProductService;
+import dev.productmanager.start.business.requests.UpdateProductRequest;
 import dev.productmanager.start.business.responses.GetAllProductsResponse;
 import dev.productmanager.start.business.responses.GetByIdResponse;
 import dev.productmanager.start.core.utils.mappers.ModelMapperService;
@@ -20,12 +22,12 @@ public class ProductManager implements ProductService{
     private ModelMapperService modelMapperService;
     @Override
     public List<GetAllProductsResponse> getAll() {
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
         List<GetAllProductsResponse> productsResponse = products.stream()
         .map(product -> this.modelMapperService.forResponse()
         .map(product, GetAllProductsResponse.class)).collect(Collectors.toList());
 //iş kuralları koşulları
-return productsResponse;
+    return productsResponse;
     }
     @Override
     public GetByIdResponse getProductById(int id) {
@@ -33,6 +35,22 @@ return productsResponse;
         GetByIdResponse response = this.modelMapperService.forResponse().map(product, GetByIdResponse.class);
         return response;
     }
+    @Override
+    public void update(UpdateProductRequest updateProductRequest, int id) {
+        Product product = productRepository.findById(id).orElseThrow();
+        product.setBrand(updateProductRequest.getBrand());
+        product.setPrice(updateProductRequest.getPrice());
+        product.setTitle(updateProductRequest.getTitle());
+        productRepository.save(product);
+    }
+    @Override
+    public List<Product> getAllProductsSortedById() {
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+    
+
+
+    
     
     
 }

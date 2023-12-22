@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import EditProductModal from "../components/EditProductModal";
+import { useMyContext } from "../context/MyContext";
 import getById from "../services/getById";
 import Product from "../types/Product";
 import formatImagesKey from "../utils/formatImagesKey";
 
-const ProductDetail = () => {
+const ProductDetail: React.FC = () => {
+  const { openEditModal, isOpenEdit } = useMyContext();
   const [product, setProduct] = useState<Product>();
   const { id } = useParams();
   const fetchData = async (id: string | undefined) => {
@@ -17,13 +20,14 @@ const ProductDetail = () => {
   };
   useEffect(() => {
     fetchData(id);
-  }, [id]);
-  console.log(JSON.stringify(product?.images));
+    console.log(product?.title);
+  }, [product, id]);
   return (
     <div>
       <div className="detail-container px-20">
         <div className="edit_section flex justify-end  mt-10">
           <button
+            onClick={() => openEditModal()}
             className="bg-blue-900 hover:bg-blue-700 ml-2 text-white  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
           >
@@ -40,7 +44,7 @@ const ProductDetail = () => {
 
           <h5 className="text-lg font-bold">Price: {product?.price}</h5>
         </div>
-        <div className="descr italic text-xl mt-5">{product?.description}</div>
+        <div className="descr italic text-xl my-5">{product?.description}</div>
         <div className="images-section mb-10 flex flex-wrap justify-around items-center gap-3 ">
           {product?.images &&
             formatImagesKey(product.images).map((url: string) => (
@@ -52,6 +56,9 @@ const ProductDetail = () => {
               />
             ))}
         </div>
+      </div>
+      <div className="fixed w-screen max-w-lg">
+        {isOpenEdit && <EditProductModal product={product} />}
       </div>
     </div>
   );

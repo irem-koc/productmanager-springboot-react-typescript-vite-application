@@ -1,11 +1,18 @@
 import React, { useEffect } from "react";
+import AddNewProductModal from "../components/AddNewProductModal";
 import Pagination from "../components/Pagination";
 import SingleProduct from "../components/SingleProduct";
 import { useMyContext } from "../context/MyContext";
 import getAll from "../services/getAll";
 import Product from "../types/Product";
 const ProductList: React.FC = () => {
-  const { productList, setProductList } = useMyContext();
+  const {
+    productList,
+    setProductList,
+    openAddModal,
+    closeAddModal,
+    isOpenAdd,
+  } = useMyContext();
   const fetchData = async () => {
     try {
       const products = await getAll();
@@ -31,6 +38,7 @@ const ProductList: React.FC = () => {
             placeholder="Find product"
           />
           <button
+            onClick={() => openAddModal()}
             className="bg-blue-500 hover:bg-blue-700 ml-2 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
           >
@@ -63,6 +71,7 @@ const ProductList: React.FC = () => {
       <div className="productlist-footer mx-auto">
         <Pagination />
       </div>
+      {isOpenAdd && <AddNewProductModal />}
     </div>
   );
 };

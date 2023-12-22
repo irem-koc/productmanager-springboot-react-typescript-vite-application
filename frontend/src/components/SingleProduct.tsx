@@ -2,8 +2,9 @@ import { useNavigate } from "react-router-dom";
 import Product from "../types/Product.ts";
 import formatDescription from "../utils/formatDescription.ts";
 
-const SingleProduct: React.FC = ({ product }: Product) => {
+const SingleProduct = ({ product }: Product) => {
   const navigate = useNavigate();
+  console.log(typeof product);
 
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">

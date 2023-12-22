@@ -4,27 +4,36 @@ type ShoppingCartProviderProps = {
   children: ReactNode;
 };
 interface MyContext {
-  //   openAddModal: () => void;
-  //   closeAddModal: () => void;
-  //   openEditModal: () => void;
-  //   closeEditModal: () => void;
-  //   addProduct: (product: Product) => void;
-  //   editProduct: (
-  //     id: number,
-  //     title?: string,
-  //     price?: string,
-  //     brand?: string
-  //   ) => void;
+  openAddModal: () => void;
+  closeAddModal: () => void;
+  openEditModal: () => void;
+  closeEditModal: () => void;
   productList: Product[];
-  setProductList: React.Dispatch<React.SetStateAction<Product[]>>;
+  setProductList: React.Dispatch<React.SetStateAction<never[]>>;
+  isOpenAdd: boolean;
+  isOpenEdit: boolean;
 }
 const MyContext = createContext<MyContext | undefined>(undefined);
 export function useMyContext() {
   return useContext(MyContext);
 }
-
 export const ContextProvider = ({ children }: ShoppingCartProviderProps) => {
   const [productList, setProductList] = useState([]);
-  const values: MyContext = { productList, setProductList };
+  const [isOpenAdd, setIsOpenAdd] = useState(false);
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const openAddModal = () => setIsOpenAdd(true);
+  const closeAddModal = () => setIsOpenAdd(false);
+  const openEditModal = () => setIsOpenEdit(true);
+  const closeEditModal = () => setIsOpenEdit(false);
+  const values: MyContext = {
+    productList,
+    setProductList,
+    openAddModal,
+    closeAddModal,
+    openEditModal,
+    closeEditModal,
+    isOpenAdd,
+    isOpenEdit,
+  };
   return <MyContext.Provider value={values}>{children}</MyContext.Provider>;
 };
