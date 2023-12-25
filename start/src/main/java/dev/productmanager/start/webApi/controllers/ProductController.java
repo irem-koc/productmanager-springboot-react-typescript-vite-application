@@ -51,8 +51,9 @@ public class ProductController {
 
     @PostMapping()
     @ResponseStatus(code=HttpStatus.CREATED)
-    public void add(@RequestBody CreateProductRequest createProductRequest) {
+    public ResponseEntity<String> add(@RequestBody CreateProductRequest createProductRequest) {
         this.productService.add(createProductRequest);
+        return ResponseEntity.ok("ok");
     }
     
 }

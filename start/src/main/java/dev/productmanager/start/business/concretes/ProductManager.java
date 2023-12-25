@@ -50,7 +50,6 @@ public class ProductManager implements ProductService{
     }
     @Override
     public void add(CreateProductRequest createProductRequest) {
-
         Product product = this.modelMapperService.forRequest().map(createProductRequest, Product.class);
         this.productRepository.save(product);
     }

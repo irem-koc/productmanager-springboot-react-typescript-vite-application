@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useMyContext } from "../context/MyContext";
+import addProduct from "../services/addProduct";
+import formatImagestoString from "../utils/formatImagestoString";
 
 const AddNewProductModal = () => {
   const { openAddModal, closeAddModal } = useMyContext();
+
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [brand, setBrand] = useState<string>("");
@@ -12,7 +15,7 @@ const AddNewProductModal = () => {
   const [rating, setRating] = useState<number>(0);
   const [stock, setStock] = useState<number>(0);
   const [thumbnail, setThumbnail] = useState<string>("");
-  const [images, setImages] = useState<Array<string>>([]);
+  const [images, setImages] = useState<string>();
 
   const handleOutsideClick = (e) => {
     // Eğer tıklanan alan modaldan dışındaysa, modalı kapat
@@ -20,9 +23,49 @@ const AddNewProductModal = () => {
       closeAddModal();
     }
   };
-  const handleSave = () => {
-    //todo: Maybe this function state in ProductList page!
+  const handleSave = async () => {
+    await addProduct(
+      title,
+      description,
+      brand,
+      category,
+      discountPercentage,
+      price,
+      rating,
+      stock,
+      thumbnail,
+      images
+    );
+    closeAddModal();
   };
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      // Dosya varsa, URL'yi alabilirsiniz
+      const url = URL.createObjectURL(file);
+      setThumbnail(url);
+      console.log(typeof url);
+    } else {
+      // Dosya seçilmediyse, boş bir URL veya başka bir değer atayabilirsiniz
+      setThumbnail("");
+    }
+  };
+  const handleImagesChange = (e) => {
+    const files = e.target.files;
+    if (files.length > 0) {
+      // Dosya varsa, her bir dosyanın URL'sini alabilirsiniz
+      const imageUrls = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setImages(formatImagestoString(imageUrls));
+    } else {
+      // Dosya seçilmediyse veya iptal edildiyse, boş bir array atanır
+      setImages("");
+    }
+  };
+  console.log("images", images);
+  console.log("thumbnail", thumbnail);
   return (
     <div
       className="relative z-10"
@@ -48,6 +91,8 @@ const AddNewProductModal = () => {
                     Title
                   </label>
                   <input
+                    onChange={(e) => setTitle(e.target.value)}
+                    value={title}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="title"
                     type="text"
@@ -62,6 +107,8 @@ const AddNewProductModal = () => {
                     Description
                   </label>
                   <input
+                    onChange={(e) => setDescription(e.target.value)}
+                    value={description}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="description"
                     type="text"
@@ -76,6 +123,8 @@ const AddNewProductModal = () => {
                     Brand
                   </label>
                   <input
+                    onChange={(e) => setBrand(e.target.value)}
+                    value={brand}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="brand"
                     type="text"
@@ -90,6 +139,8 @@ const AddNewProductModal = () => {
                     Category
                   </label>
                   <input
+                    onChange={(e) => setCategory(e.target.value)}
+                    value={category}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="category"
                     type="text"
@@ -104,6 +155,10 @@ const AddNewProductModal = () => {
                     Discount Percentage
                   </label>
                   <input
+                    onChange={(e) =>
+                      setDiscountPercentage(Number(e.target.value))
+                    }
+                    value={discountPercentage}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="discountPercentage"
                     type="number"
@@ -118,6 +173,8 @@ const AddNewProductModal = () => {
                     Price
                   </label>
                   <input
+                    onChange={(e) => setPrice(Number(e.target.value))}
+                    value={price}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="price"
                     type="number"
@@ -132,6 +189,8 @@ const AddNewProductModal = () => {
                     Rating
                   </label>
                   <input
+                    onChange={(e) => setRating(Number(e.target.value))}
+                    value={rating}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="rating"
                     type="number"
@@ -146,6 +205,8 @@ const AddNewProductModal = () => {
                     Stock
                   </label>
                   <input
+                    onChange={(e) => setStock(Number(e.target.value))}
+                    value={stock}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="stock"
                     type="number"
@@ -160,6 +221,7 @@ const AddNewProductModal = () => {
                     Thumbnail
                   </label>
                   <input
+                    onChange={(e) => handleThumbnailChange(e)}
                     accept=".png, .jpg, .jpeg, .svg"
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="thumbnail"
@@ -175,6 +237,7 @@ const AddNewProductModal = () => {
                     Images
                   </label>
                   <input
+                    onChange={(e) => handleImagesChange(e)}
                     accept=".png, .jpg, .jpeg, .svg"
                     multiple
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
