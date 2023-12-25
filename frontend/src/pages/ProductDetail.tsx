@@ -10,22 +10,21 @@ const ProductDetail: React.FC = () => {
   const { openEditModal, isOpenEdit } = useMyContext();
   const [product, setProduct] = useState<Product>();
   const { id } = useParams();
-  const fetchData = async (id: string | undefined) => {
+  const fetchData = async (id: number) => {
     try {
-      setProduct(await getById(id ?? ""));
+      setProduct(await getById(Number(id) ?? undefined));
     } catch (error) {
       // Handle errors
       console.error("Error fetching product:", error);
     }
   };
   useEffect(() => {
-    fetchData(id);
-    console.log(product?.title);
-  }, [product, id]);
+    fetchData(Number(id));
+  }, [id]);
   return (
     <div>
       <div className="detail-container px-20">
-        <div className="edit_section flex justify-end  mt-10">
+        <div className="edit_section flex justify-end mt-10">
           <button
             onClick={() => openEditModal()}
             className="bg-blue-900 hover:bg-blue-700 ml-2 text-white  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -58,7 +57,9 @@ const ProductDetail: React.FC = () => {
         </div>
       </div>
       <div className="fixed w-screen max-w-lg">
-        {isOpenEdit && <EditProductModal product={product} />}
+        {isOpenEdit && (
+          <EditProductModal product={product} setProduct={setProduct} />
+        )}
       </div>
     </div>
   );

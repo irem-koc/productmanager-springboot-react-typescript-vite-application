@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import dev.productmanager.start.business.abstracts.ProductService;
+import dev.productmanager.start.business.requests.CreateProductRequest;
 import dev.productmanager.start.business.requests.UpdateProductRequest;
 import dev.productmanager.start.business.responses.GetAllProductsResponse;
 import dev.productmanager.start.business.responses.GetByIdResponse;
@@ -26,7 +27,6 @@ public class ProductManager implements ProductService{
         List<GetAllProductsResponse> productsResponse = products.stream()
         .map(product -> this.modelMapperService.forResponse()
         .map(product, GetAllProductsResponse.class)).collect(Collectors.toList());
-//iş kuralları koşulları
     return productsResponse;
     }
     @Override
@@ -36,17 +36,25 @@ public class ProductManager implements ProductService{
         return response;
     }
     @Override
-    public void update(UpdateProductRequest updateProductRequest, int id) {
+    public Product update(UpdateProductRequest updateProductRequest, int id) {
         Product product = productRepository.findById(id).orElseThrow();
         product.setBrand(updateProductRequest.getBrand());
         product.setPrice(updateProductRequest.getPrice());
         product.setTitle(updateProductRequest.getTitle());
         productRepository.save(product);
+        return product;
     }
     @Override
     public List<Product> getAllProductsSortedById() {
         return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
+    @Override
+    public void add(CreateProductRequest createProductRequest) {
+
+        Product product = this.modelMapperService.forRequest().map(createProductRequest, Product.class);
+        this.productRepository.save(product);
+    }
+    
     
 
 

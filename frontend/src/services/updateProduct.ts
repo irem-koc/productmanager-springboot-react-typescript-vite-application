@@ -12,7 +12,7 @@ const updateProduct = async (
       price: price,
       brand: brand,
     });
-    console.log(response);
+    console.log("response 2", response.data);
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;

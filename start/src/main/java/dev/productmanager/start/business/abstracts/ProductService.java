@@ -2,6 +2,7 @@ package dev.productmanager.start.business.abstracts;
 
 import java.util.List;
 
+import dev.productmanager.start.business.requests.CreateProductRequest;
 import dev.productmanager.start.business.requests.UpdateProductRequest;
 import dev.productmanager.start.business.responses.GetAllProductsResponse;
 import dev.productmanager.start.business.responses.GetByIdResponse;
@@ -12,7 +13,9 @@ public interface ProductService {
 
     GetByIdResponse getProductById(int id);
 
-    void update(UpdateProductRequest updateProductRequest, int id);
+    Product update(UpdateProductRequest updateProductRequest, int id);
 
     List<Product> getAllProductsSortedById();
+
+    void add(CreateProductRequest createProductRequest);
 }

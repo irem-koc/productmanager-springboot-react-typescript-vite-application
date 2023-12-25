@@ -1,10 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import Product from "../types/Product.ts";
+import { useNavigate, useParams } from "react-router-dom";
 import formatDescription from "../utils/formatDescription.ts";
 
-const SingleProduct = ({ product }: Product) => {
+const SingleProduct = ({ product }) => {
   const navigate = useNavigate();
-  console.log(typeof product);
 
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">

@@ -1,21 +1,25 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { MouseEvent, useState } from "react";
 import { useMyContext } from "../context/MyContext";
 import getById from "../services/getById";
 import updateProduct from "../services/updateProduct";
 import Product from "./../types/Product";
-const EditProductModal = ({ product }: Product) => {
+const EditProductModal = ({ product, setProduct }: any) => {
   const { openEditModal, closeEditModal } = useMyContext();
+  const [id, setId] = useState(product.id);
   const [title, setTitle] = useState(product.title);
   const [price, setPrice] = useState(product.price);
   const [brand, setBrand] = useState(product.brand);
-  const handleOutsideClick = (e) => {
-    // Eğer tıklanan alan modaldan dışındaysa, modalı kapat
+  const handleOutsideClick = (e: MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
       closeEditModal();
     }
   };
-  const { id } = useParams();
+  const handleSave = async () => {
+    const updatedData = await updateProduct(Number(id), title, price, brand);
+    const newData = await getById(id);
+    setProduct(newData);
+    closeEditModal();
+  };
   return (
     <div>
       <div
@@ -30,7 +34,7 @@ const EditProductModal = ({ product }: Product) => {
             onClick={(e) => handleOutsideClick(e)}
             className="flex min-h-full items-end w-full justify-center p-4 text-center items-center "
           >
-            <div className="relative transform min-h-full flex items-center justify-center overflow w-full sm:w-4/6 md:w-4/6 lg:w-4/6 xl:w-4/6 rounded-lg bg-white text-left shadow-xl transition-all ">
+            <div className="relative rounded-lg transform min-h-full flex items-center justify-center overflow w-full sm:w-4/6 md:w-4/6 lg:w-4/6 xl:w-4/6 rounded-lg bg-white text-left shadow-xl transition-all ">
               <div className="w-full max-w-s">
                 <form className="bg-white w-full px-8 pt-6 pb-8 mb-4">
                   <div className="mb-4">
@@ -41,6 +45,7 @@ const EditProductModal = ({ product }: Product) => {
                       Title
                     </label>
                     <input
+                      name="title"
                       onChange={(e) => setTitle(e.target.value)}
                       value={title}
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -57,6 +62,7 @@ const EditProductModal = ({ product }: Product) => {
                       Price
                     </label>
                     <input
+                      name="price"
                       onChange={(e) => setPrice(e.target.value)}
                       value={price}
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -73,6 +79,7 @@ const EditProductModal = ({ product }: Product) => {
                       Brand
                     </label>
                     <input
+                      name="brand"
                       onChange={(e) => setBrand(e.target.value)}
                       value={brand}
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -90,15 +97,7 @@ const EditProductModal = ({ product }: Product) => {
                       Cancel
                     </button>
                     <button
-                      onClick={() => {
-                        updateProduct(id, title, price, brand);
-                        closeEditModal();
-                        console.log("a");
-
-                        getById(id);
-
-                        console.log("b");
-                      }}
+                      onClick={() => handleSave()}
                       className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                       type="button"
                     >
