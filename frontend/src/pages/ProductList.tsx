@@ -67,7 +67,7 @@ const ProductList: React.FC = () => {
           </tbody>
         </table>
       </div>
-      <div className="productlist-footer mx-auto">
+      <div className="productlist-footer mx-auto mt-10">
         <Pagination />
       </div>
       {isOpenAdd && <AddNewProductModal />}

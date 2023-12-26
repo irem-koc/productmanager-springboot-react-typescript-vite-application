@@ -17,5 +17,7 @@ public interface ProductService {
 
     List<Product> getAllProductsSortedById();
 
-    void add(CreateProductRequest createProductRequest);
+    Product add(CreateProductRequest createProductRequest);
+
+    void delete(int id);
 }

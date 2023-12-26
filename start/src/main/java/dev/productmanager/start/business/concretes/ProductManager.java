@@ -49,9 +49,14 @@ public class ProductManager implements ProductService{
         return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
     @Override
-    public void add(CreateProductRequest createProductRequest) {
+    public Product add(CreateProductRequest createProductRequest) {
         Product product = this.modelMapperService.forRequest().map(createProductRequest, Product.class);
         this.productRepository.save(product);
+        return product;
+    }
+    @Override
+    public void delete(int id) {
+        this.productRepository.deleteById(id);
     }
     
     

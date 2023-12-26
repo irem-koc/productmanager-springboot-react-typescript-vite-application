@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useMyContext } from "../context/MyContext";
 import addProduct from "../services/addProduct";
+import getAll from "../services/getAll";
+import formatImages from "../utils/formatImagesKey";
 import formatImagestoString from "../utils/formatImagestoString";
 
 const AddNewProductModal = () => {
-  const { openAddModal, closeAddModal } = useMyContext();
+  const { openAddModal, closeAddModal, productList, setProductList } =
+    useMyContext();
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -15,7 +18,7 @@ const AddNewProductModal = () => {
   const [rating, setRating] = useState<number>(0);
   const [stock, setStock] = useState<number>(0);
   const [thumbnail, setThumbnail] = useState<string>("");
-  const [images, setImages] = useState<string>();
+  const [images, setImages] = useState<string>("");
 
   const handleOutsideClick = (e) => {
     // Eğer tıklanan alan modaldan dışındaysa, modalı kapat
@@ -24,7 +27,7 @@ const AddNewProductModal = () => {
     }
   };
   const handleSave = async () => {
-    await addProduct(
+    const updatedData = await addProduct(
       title,
       description,
       brand,
@@ -36,7 +39,14 @@ const AddNewProductModal = () => {
       thumbnail,
       images
     );
+    const newProductList = await getAll();
+    setProductList(newProductList);
     closeAddModal();
+
+    // const updatedData = await updateProduct(Number(id), title, price, brand);
+    // const newData = await getById(id);
+    // setProduct(newData);
+    // closeEditModal();
   };
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
@@ -45,22 +55,28 @@ const AddNewProductModal = () => {
       // Dosya varsa, URL'yi alabilirsiniz
       const url = URL.createObjectURL(file);
       setThumbnail(url);
-      console.log(typeof url);
+      console.log(url);
     } else {
       // Dosya seçilmediyse, boş bir URL veya başka bir değer atayabilirsiniz
       setThumbnail("");
     }
   };
+  console.log(
+    typeof formatImages(
+      '["blob:http://localhost:5173/1c6ae757-8587-4acf-8a65-65a1233ce358","blob:http://localhost:5173/38e4b6a4-f3da-4d64-a353-fcfbec443b32","blob:http://localhost:5173/b7d0dae5-0951-43ec-b9a1-45d17539c241","blob:http://localhost:5173/3a5786b5-e07f-474d-bb87-0b95625ba548","blob:http://localhost:5173/0687a787-6a6f-4882-ac3e-632785bd4fb3"]'
+    )
+  );
+
   const handleImagesChange = (e) => {
     const files = e.target.files;
     if (files.length > 0) {
-      // Dosya varsa, her bir dosyanın URL'sini alabilirsiniz
       const imageUrls = Array.from(files).map((file) =>
         URL.createObjectURL(file)
       );
+      console.log("this is format" + typeof formatImagestoString(imageUrls));
+
       setImages(formatImagestoString(imageUrls));
     } else {
-      // Dosya seçilmediyse veya iptal edildiyse, boş bir array atanır
       setImages("");
     }
   };
