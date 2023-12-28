@@ -3,6 +3,7 @@ import AddNewProductModal from "../components/AddNewProductModal";
 import Pagination from "../components/Pagination";
 import SingleProduct from "../components/SingleProduct";
 import { useMyContext } from "../context/MyContext";
+import filterProduct from "../services/filterProduct";
 import getAll from "../services/getAll";
 import Product from "../types/Product";
 const ProductList: React.FC = () => {
@@ -12,6 +13,8 @@ const ProductList: React.FC = () => {
     openAddModal,
     closeAddModal,
     isOpenAdd,
+    filterValue,
+    setFilterValue,
   } = useMyContext();
   const fetchData = async () => {
     try {
@@ -23,7 +26,41 @@ const ProductList: React.FC = () => {
   };
   useEffect(() => {
     fetchData();
+    setFilterValue("");
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Assuming filterProduct returns a promise
+        const filteredProducts = await filterProduct(filterValue);
+        setProductList(filteredProducts);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle the error if needed
+      }
+    };
+
+    const fetchDataTimeout = setTimeout(fetchData, 2000);
+
+    return () => clearTimeout(fetchDataTimeout);
+  }, [filterValue]);
+
+  const handleFilter = async (e) => {
+    const newValue = e.target.value;
+    setFilterValue(() => {
+      return newValue;
+    });
+    // if (newValue.length >= 3) {
+    //   const filteredProducts = await filterProduct(newValue);
+    //   setProductList(filteredProducts);
+    // }
+    // if (newValue.trim() === "") {
+    //   setFilterValue("");
+    //   const filteredProducts = await filterProduct("");
+    //   setProductList(filteredProducts);
+    // }
+  };
 
   return (
     <div className="px-20">
@@ -31,6 +68,8 @@ const ProductList: React.FC = () => {
         <h3 className="text-start text-2xl">Products</h3>
         <div className="right-section md:w-1/3 flexjustify-between">
           <input
+            value={filterValue}
+            onChange={(e) => handleFilter(e)}
             className="shadow appearance-none border resize-x w-4/5 rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="username"
             type="text"

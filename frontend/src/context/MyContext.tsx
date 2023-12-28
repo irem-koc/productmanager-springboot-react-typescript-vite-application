@@ -12,6 +12,8 @@ interface MyContext {
   setProductList: React.Dispatch<React.SetStateAction<never[]>>;
   isOpenAdd: boolean;
   isOpenEdit: boolean;
+  filterValue: string;
+  setFilterValue: React.Dispatch<React.SetStateAction<string>>;
 }
 const MyContext = createContext<MyContext | undefined>(undefined);
 export function useMyContext() {
@@ -21,6 +23,7 @@ export const ContextProvider = ({ children }: ShoppingCartProviderProps) => {
   const [productList, setProductList] = useState([]);
   const [isOpenAdd, setIsOpenAdd] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const [filterValue, setFilterValue] = useState("");
   const openAddModal = () => setIsOpenAdd(true);
   const closeAddModal = () => setIsOpenAdd(false);
   const openEditModal = () => setIsOpenEdit(true);
@@ -34,6 +37,8 @@ export const ContextProvider = ({ children }: ShoppingCartProviderProps) => {
     closeEditModal,
     isOpenAdd,
     isOpenEdit,
+    filterValue,
+    setFilterValue,
   };
   return <MyContext.Provider value={values}>{children}</MyContext.Provider>;
 };

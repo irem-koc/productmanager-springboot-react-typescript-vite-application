@@ -20,4 +20,6 @@ public interface ProductService {
     Product add(CreateProductRequest createProductRequest);
 
     void delete(int id);
+
+    List<Product> getProductsByDescription(String description);
 }

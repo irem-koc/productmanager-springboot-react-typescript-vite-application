@@ -58,6 +58,10 @@ public class ProductManager implements ProductService{
     public void delete(int id) {
         this.productRepository.deleteById(id);
     }
+	@Override
+    public List<Product> getProductsByDescription(String description) {
+        return productRepository.findByDescriptionLike(description);
+	}
     
     
 

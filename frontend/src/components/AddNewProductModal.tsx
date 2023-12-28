@@ -68,18 +68,25 @@ const AddNewProductModal = () => {
   );
 
   const handleImagesChange = (e) => {
-    const files = e.target.files;
-    if (files.length > 0) {
-      const imageUrls = Array.from(files).map((file) =>
-        URL.createObjectURL(file)
-      );
-      console.log("this is format" + typeof formatImagestoString(imageUrls));
+    // const files = e.target.files;
+    // if (files.length > 0) {
+    //   const imageUrls = Array.from(files).map((file) =>
+    //     URL.createObjectURL(file)
+    //   );
+    //   console.log("this is format" + typeof formatImagestoString(imageUrls));
 
-      setImages(formatImagestoString(imageUrls));
-    } else {
-      setImages("");
+    //   setImages(formatImagestoString(imageUrls));
+    // } else {
+    //   setImages("");
+    // }
+    const image = [];
+    for (let i = 0; i < e.target.files.length; i++) {
+      image.push(URL.createObjectURL(e.target.files[i]));
     }
+    setImages(formatImagestoString(image));
   };
+
+  console.log(images);
   console.log("images", images);
   console.log("thumbnail", thumbnail);
   return (

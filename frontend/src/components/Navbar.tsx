@@ -1,10 +1,10 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const location = useLocation();
   const path = location.pathname;
-
+  const navigate = useNavigate();
   return (
     <div>
       <nav className="bg-gray-800 ">
@@ -72,19 +72,19 @@ const Navbar: React.FC = () => {
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
                   <a
-                    href="/"
+                    onClick={() => navigate("/")}
                     className={`${
                       path === "/" ? "bg-gray-900" : "hover:bg-gray-700"
-                    } text-white  rounded-md px-3 py-2 text-medium font-medium`}
+                    } text-white hover:cursor-pointer rounded-md px-3 py-2 text-medium font-medium`}
                     aria-current="page"
                   >
                     Home
                   </a>
                   <a
-                    href="/products"
+                    onClick={() => navigate("/products")}
                     className={`${
                       path === "/products" ? "bg-gray-900" : "hover:bg-gray-700"
-                    } text-gray-200  hover:text-white rounded-md px-3 py-2 text-medium font-medium`}
+                    } text-gray-200 hover:cursor-pointer  hover:text-white rounded-md px-3 py-2 text-medium font-medium`}
                   >
                     Products
                   </a>
@@ -97,18 +97,18 @@ const Navbar: React.FC = () => {
         <div className="sm:hidden" id="mobile-menu">
           <div className="space-y-1 px-2 pb-3 pt-2">
             <a
-              href="/"
+              onClick={() => navigate("/")}
               className={`${
                 path === "/" ? "bg-gray-900" : "hover:bg-gray-700"
-              } text-white  block rounded-md px-3 py-2 text-base font-medium`}
+              } text-white hover:cursor-pointer block rounded-md px-3 py-2 text-base font-medium`}
             >
               Home
             </a>
             <a
-              href="/products"
+              onClick={() => navigate("/products")}
               className={`${
                 path === "/products" ? "bg-gray-900" : "hover:bg-gray-700"
-              } text-gray-200  hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+              } text-gray-200 hover:cursor-pointer hover:text-white block rounded-md px-3 py-2 text-base font-medium"
             `}
             >
               Products
