@@ -2,6 +2,7 @@ package dev.productmanager.start.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,11 @@ public class ProductManager implements ProductService{
     public List<Product> getProductsByDescription(String description) {
         return productRepository.findByDescriptionLike(description);
 	}
+    @Override
+    public List<Product> findProductsWithPagination(int offset, int pageSize) {
+        List<Product> products = productRepository.findAll(PageRequest.of(offset, pageSize)).getContent();
+        return products;
+        }
     
     
 

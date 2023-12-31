@@ -14,6 +14,10 @@ interface MyContext {
   isOpenEdit: boolean;
   filterValue: string;
   setFilterValue: React.Dispatch<React.SetStateAction<string>>;
+  pageItem: number;
+  setPageItem: React.Dispatch<React.SetStateAction<number>>;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 const MyContext = createContext<MyContext | undefined>(undefined);
 export function useMyContext() {
@@ -21,8 +25,10 @@ export function useMyContext() {
 }
 export const ContextProvider = ({ children }: ShoppingCartProviderProps) => {
   const [productList, setProductList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const [isOpenAdd, setIsOpenAdd] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const [pageItem, setPageItem] = useState(10);
   const [filterValue, setFilterValue] = useState("");
   const openAddModal = () => setIsOpenAdd(true);
   const closeAddModal = () => setIsOpenAdd(false);
@@ -39,6 +45,10 @@ export const ContextProvider = ({ children }: ShoppingCartProviderProps) => {
     isOpenEdit,
     filterValue,
     setFilterValue,
+    pageItem,
+    setPageItem,
+    currentPage,
+    setCurrentPage,
   };
   return <MyContext.Provider value={values}>{children}</MyContext.Provider>;
 };

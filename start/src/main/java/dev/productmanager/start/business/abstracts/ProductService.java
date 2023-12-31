@@ -22,4 +22,6 @@ public interface ProductService {
     void delete(int id);
 
     List<Product> getProductsByDescription(String description);
+
+    List<Product> findProductsWithPagination(int offset, int pageSize);
 }

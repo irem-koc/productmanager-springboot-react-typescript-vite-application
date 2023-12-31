@@ -11,7 +11,6 @@ const ProductList: React.FC = () => {
     productList,
     setProductList,
     openAddModal,
-    closeAddModal,
     isOpenAdd,
     filterValue,
     setFilterValue,
@@ -25,7 +24,7 @@ const ProductList: React.FC = () => {
     }
   };
   useEffect(() => {
-    fetchData();
+    // fetchData();
     setFilterValue("");
   }, []);
 
@@ -33,15 +32,16 @@ const ProductList: React.FC = () => {
     const fetchData = async () => {
       try {
         // Assuming filterProduct returns a promise
-        const filteredProducts = await filterProduct(filterValue);
-        setProductList(filteredProducts);
+        if (filterValue.length > 0) {
+          const filteredProducts = await filterProduct(filterValue);
+          setProductList(filteredProducts);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Handle the error if needed
       }
     };
 
-    const fetchDataTimeout = setTimeout(fetchData, 2000);
+    const fetchDataTimeout = setTimeout(fetchData, 1500);
 
     return () => clearTimeout(fetchDataTimeout);
   }, [filterValue]);
@@ -51,15 +51,6 @@ const ProductList: React.FC = () => {
     setFilterValue(() => {
       return newValue;
     });
-    // if (newValue.length >= 3) {
-    //   const filteredProducts = await filterProduct(newValue);
-    //   setProductList(filteredProducts);
-    // }
-    // if (newValue.trim() === "") {
-    //   setFilterValue("");
-    //   const filteredProducts = await filterProduct("");
-    //   setProductList(filteredProducts);
-    // }
   };
 
   return (

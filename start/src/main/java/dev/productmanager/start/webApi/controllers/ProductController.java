@@ -62,10 +62,15 @@ public class ProductController {
     public void delete(@PathVariable int id) {
         this.productService.delete(id);
     }
-
+// /products?description=valueDescription
     @GetMapping("/byDescription")
     public List<Product> getProductsByDescription(@RequestParam("description") String description) {
         return productService.getProductsByDescription(description);
     }
-    // /products?description=valueDescription
+    
+
+    @GetMapping("/pagination/{offset}/{pageSize}")
+    public List<Product> getProductsByDescription(@PathVariable int offset, @PathVariable int pageSize) {
+        return productService.findProductsWithPagination(offset, pageSize);
+    }
 }
