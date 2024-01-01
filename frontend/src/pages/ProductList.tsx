@@ -14,6 +14,7 @@ const ProductList: React.FC = () => {
     isOpenAdd,
     filterValue,
     setFilterValue,
+    setPageItem,
   } = useMyContext();
   const fetchData = async () => {
     try {
@@ -23,10 +24,6 @@ const ProductList: React.FC = () => {
       console.error("Error fetching products:", error);
     }
   };
-  useEffect(() => {
-    // fetchData();
-    setFilterValue("");
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +32,7 @@ const ProductList: React.FC = () => {
         if (filterValue.length > 0) {
           const filteredProducts = await filterProduct(filterValue);
           setProductList(filteredProducts);
+          setPageItem(filteredProducts.length);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -97,9 +95,7 @@ const ProductList: React.FC = () => {
           </tbody>
         </table>
       </div>
-      <div className="productlist-footer mx-auto mt-10">
-        <Pagination />
-      </div>
+      <Pagination />
       {isOpenAdd && <AddNewProductModal />}
     </div>
   );

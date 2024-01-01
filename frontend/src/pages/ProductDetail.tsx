@@ -18,7 +18,6 @@ const ProductDetail: React.FC = () => {
       console.error("Error fetching product:", error);
     }
   };
-  console.log("a işte bu ilk hali " + product?.images);
 
   useEffect(() => {
     fetchData(Number(id));

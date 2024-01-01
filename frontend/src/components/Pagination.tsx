@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMyContext } from "../context/MyContext";
+import getAll from "../services/getAll";
 import paginationProduct from "../services/paginationProduct";
 
 const Pagination: React.FC = () => {
@@ -10,8 +11,22 @@ const Pagination: React.FC = () => {
     setProductList,
     currentPage,
     setCurrentPage,
-    // setProductList
   } = useMyContext();
+  const [products, setProducts] = useState([]);
+
+  const fetched = async () => {
+    try {
+      const products = await getAll();
+      setProducts(products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+  useEffect(() => {
+    fetched();
+  }, []);
+  const length_prod = products.length;
+  const remain = length_prod % pageItem;
 
   const handleChange = async (e) => {
     const newValue = e.target.value;
@@ -26,7 +41,6 @@ const Pagination: React.FC = () => {
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
-  console.log("current page " + currentPage);
   const fetchData = async () => {
     try {
       // Assuming filterProduct returns a promise
@@ -42,7 +56,7 @@ const Pagination: React.FC = () => {
     fetchData();
   }, [pageItem, currentPage]);
   return (
-    <div>
+    <div className="my-10 flex justify-center items-center gap-3">
       <div className="inline-block relative w-64">
         <select
           value={pageItem}
@@ -67,14 +81,14 @@ const Pagination: React.FC = () => {
         <button
           disabled={currentPage === 0}
           onClick={() => handlePrevPage()}
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+          className="bg-gray-300 mr-3 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
         >
           Prev
         </button>
         <button
-          // disabled={currentPage * pageItem + pageItem <= productList.length}
+          disabled={remain == productList.length}
           onClick={() => handleNextPage()}
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
         >
           Next
         </button>
